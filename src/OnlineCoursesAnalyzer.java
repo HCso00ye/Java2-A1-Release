@@ -260,7 +260,7 @@ public class OnlineCoursesAnalyzer {
             double similarity = Math.pow(age - avgMedianAge, 2)
                     + Math.pow(gender * 100 - avgPercentMale, 2)
                     + Math.pow(isBachelorOrHigher * 100 - avgPercentDegree, 2);
-            courseSimilarities.add(new CourseSimilarity(courseStats.getLatestCourse(), similarity)); // 使用最新的课程计算相似度
+            courseSimilarities.add(new CourseSimilarity(courseStats.getLatestCourse(), similarity));
         }
         // sort courses by similarity and launch date
         Collections.sort(courseSimilarities);
@@ -274,7 +274,7 @@ public class OnlineCoursesAnalyzer {
             String number = course.number;
             String title = course.title;
             if (!courseTitles.contains(title) && !courseNumbers.contains(number)) {
-                recommendedCourses.add(title); // 返回课程名称和编号
+                recommendedCourses.add(title);
                 courseTitles.add(title);
                 courseNumbers.add(number);
                 count++;
@@ -303,7 +303,7 @@ public class OnlineCoursesAnalyzer {
             totalMedianAge += course.getMedianAge();
             totalPercentMale += course.percentMale;
             totalPercentDegree += course.percentDegree;
-            if (course.getLaunchDate().after(latestCourse.getLaunchDate())) { // 更新 latestCourse
+            if (course.getLaunchDate().after(latestCourse.getLaunchDate())) {
                 latestCourse = course;
             }
         }
@@ -350,29 +350,6 @@ public class OnlineCoursesAnalyzer {
             }
         }
     }
-
-
-    private double getAvgMedianAge(String courseNumber, List<Course> courses) {
-        List<Course> coursesWithSameNumber = getCoursesWithSameNumber(courseNumber, courses);
-        double sumMedianAge = coursesWithSameNumber.stream().mapToDouble(Course::getMedianAge).sum();
-        return sumMedianAge / coursesWithSameNumber.size();
-    }
-    private double getAvgMale(String courseNumber, List<Course> courses) {
-        List<Course> coursesWithSameNumber = getCoursesWithSameNumber(courseNumber, courses);
-        double sumMaleRate = coursesWithSameNumber.stream().mapToDouble(Course::getMaleRate).sum();
-        return sumMaleRate / coursesWithSameNumber.size();
-    }
-    private double getAvgDegree(String courseNumber, List<Course> courses) {
-        List<Course> coursesWithSameNumber = getCoursesWithSameNumber(courseNumber, courses);
-        double sumRate = coursesWithSameNumber.stream().mapToDouble(Course::getDegreeRate).sum();
-        return sumRate / coursesWithSameNumber.size();
-    }
-    private List<Course> getCoursesWithSameNumber(String courseNumber, List<Course> courses) {
-        return courses.stream()
-                .filter(c -> c.number.equals(courseNumber))
-                .collect(Collectors.toList());
-    }
-
 }
 
 class Course {
