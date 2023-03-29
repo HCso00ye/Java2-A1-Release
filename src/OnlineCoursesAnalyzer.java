@@ -232,7 +232,6 @@ public class OnlineCoursesAnalyzer {
 
     //6
     //public List<String> recommendCourses(int age, int gender, int isBachelorOrHigher) {return null;}
-
     public List<String> recommendCourses(int age, int gender, int isBachelorOrHigher) {
         // calculate average Median Age, % Male, and % Bachelor's Degree or Higher for each course
         Map<String, CourseStats> courseStatsMap = new HashMap<>();
@@ -278,10 +277,15 @@ public class OnlineCoursesAnalyzer {
                 }
             }
         }
+        // sort recommended courses by alphabetical order of their titles if only two courses have the same similarity value
+        if (recommendedCourses.size() >= 2 && courseSimilarities.get(9).getSimilarity() == courseSimilarities.get(10).getSimilarity()) {
+            Collections.sort(recommendedCourses);
+        }
         return recommendedCourses;
     }
 
-    // helper class to store course statistics
+
+    //store course statistics
     class CourseStats {
         private int count;
         private double totalMedianAge;
