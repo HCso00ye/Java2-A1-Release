@@ -3,14 +3,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.stream.Collectors;
-
-/**
- *
- * This is just a demo for you, please run it on JDK17 (some statements may be not allowed in lower version).
- * This is just a demo, and you can extend and implement functions
- * based on this demo, or implement it in a different way.
- */
 
 public class OnlineCoursesAnalyzer {
 
@@ -25,12 +17,15 @@ public class OnlineCoursesAnalyzer {
             while ((line = br.readLine()) != null) {
                 String[] info = line.split(",(?=([^\\\"]*\\\"[^\\\"]*\\\")*[^\\\"]*$)", -1);
                 Course course = new Course(info[0], info[1], new Date(info[2]), info[3], info[4], info[5],
-                        Integer.parseInt(info[6]), Integer.parseInt(info[7]), Integer.parseInt(info[8]),
-                        Integer.parseInt(info[9]), Integer.parseInt(info[10]), Double.parseDouble(info[11]),
-                        Double.parseDouble(info[12]), Double.parseDouble(info[13]), Double.parseDouble(info[14]),
-                        Double.parseDouble(info[15]), Double.parseDouble(info[16]), Double.parseDouble(info[17]),
-                        Double.parseDouble(info[18]), Double.parseDouble(info[19]), Double.parseDouble(info[20]),
-                        Double.parseDouble(info[21]), Double.parseDouble(info[22]));
+                        Integer.parseInt(info[6]), Integer.parseInt(info[7]),
+                        Integer.parseInt(info[8]), Integer.parseInt(info[9]),
+                        Integer.parseInt(info[10]), Double.parseDouble(info[11]),
+                        Double.parseDouble(info[12]), Double.parseDouble(info[13]),
+                        Double.parseDouble(info[14]), Double.parseDouble(info[15]),
+                        Double.parseDouble(info[16]), Double.parseDouble(info[17]),
+                        Double.parseDouble(info[18]), Double.parseDouble(info[19]),
+                        Double.parseDouble(info[20]), Double.parseDouble(info[21]),
+                        Double.parseDouble(info[22]));
                 courses.add(course);
             }
         } catch (IOException e) {
@@ -71,7 +66,8 @@ public class OnlineCoursesAnalyzer {
             String instAndSubj = institution + "-" + subject;
             int participants = course.participants;
             if (ptcpCountByInstAndSubject.containsKey(instAndSubj)) {
-                ptcpCountByInstAndSubject.put(instAndSubj, ptcpCountByInstAndSubject.get(instAndSubj) + participants);
+                ptcpCountByInstAndSubject.put
+                        (instAndSubj, ptcpCountByInstAndSubject.get(instAndSubj) + participants);
             } else {
                 ptcpCountByInstAndSubject.put(instAndSubj, participants);
             }
@@ -163,15 +159,13 @@ public class OnlineCoursesAnalyzer {
             // exist
             if (courseData.containsKey(title)) {
                 Double[] data = courseData.get(title);
-                data[0] = Math.max(course.totalHours,data[0]);
+                data[0] = Math.max(course.totalHours, data[0]);
                 data[1] = Math.max(course.participants, data[1]);
                 courseData.put(title, data);
-            }
-            // or not
-            else {
+            } else {
                 Double[] data = new Double[2];
                 data[0] = course.totalHours;
-                data[1] = (double)course.participants;
+                data[1] = (double) course.participants;
                 courseData.put(title, data);
             }
         }
@@ -215,6 +209,7 @@ public class OnlineCoursesAnalyzer {
         }
         return topCourses;
     }
+
     //5
     //public List<String> searchCourses(String courseSubject, double percentAudited, double totalCourseHours) {return null;}
     public List<String> searchCourses(String courseSubject, double percentAudited, double totalCourseHours) {
@@ -295,7 +290,7 @@ public class OnlineCoursesAnalyzer {
         private Course latestCourse;
 
         public CourseStats(Course course) {
-            this.latestCourse  = course;
+            this.latestCourse = course;
         }
 
         public void addCourse(Course course) {
@@ -311,12 +306,15 @@ public class OnlineCoursesAnalyzer {
         public double getAvgMedianAge() {
             return totalMedianAge / count;
         }
+
         public double getAvgPercentMale() {
             return totalPercentMale / count;
         }
+
         public double getAvgPercentDegree() {
             return totalPercentDegree / count;
         }
+
         public int getCount() {
             return count;
         }
@@ -325,20 +323,25 @@ public class OnlineCoursesAnalyzer {
             return latestCourse;
         }
     }
+
     // helper class to store course similarity values
     class CourseSimilarity implements Comparable<CourseSimilarity> {
         private Course course;
         private double similarity;
+
         public CourseSimilarity(Course course, double similarity) {
             this.course = course;
             this.similarity = similarity;
         }
+
         public Course getCourse() {
             return course;
         }
+
         public double getSimilarity() {
             return similarity;
         }
+
         @Override
         public int compareTo(CourseSimilarity other) {
             if (similarity == other.similarity) {
@@ -415,58 +418,12 @@ class Course {
         this.percentMale = percentMale;
         this.percentFemale = percentFemale;
         this.percentDegree = percentDegree;
-
-
     }
-
     public double getMedianAge() {
         return medianAge;
     }
-
-    public double getMaleRate() {
-        return percentMale;
-    }
-
-    public double getDegreeRate(){
-        return percentDegree;
-    }
-    public Date getLaunchDate(){
+    public Date getLaunchDate() {
         return launchDate;
     }
 
-}
-
-class CourseStats {
-    private int count;
-    private double totalMedianAge;
-    private double totalPercentMale;
-    private double totalPercentDegree;
-    private Course latestCourse; // 添加 latestCourse 属性
-    public CourseStats(Course course) {
-        this.latestCourse = course;
-    }
-    public void addCourse(Course course) {
-        count++;
-        totalMedianAge += course.getMedianAge();
-        totalPercentMale += course.percentMale;
-        totalPercentDegree += course.percentDegree;
-        if (course.getLaunchDate().after(latestCourse.getLaunchDate())) { // 更新 latestCourse
-            latestCourse = course;
-        }
-    }
-    public double getAvgMedianAge() {
-        return totalMedianAge / count;
-    }
-    public double getAvgPercentMale() {
-        return totalPercentMale / count;
-    }
-    public double getAvgPercentDegree() {
-        return totalPercentDegree / count;
-    }
-    public int getCount() {
-        return count;
-    }
-    public Course getLatestCourse() { // 添加 getLatestCourse 方法
-        return latestCourse;
-    }
 }
